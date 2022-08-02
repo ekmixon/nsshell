@@ -31,16 +31,16 @@ class Config(object):
 
         config = ConfigParser.ConfigParser()
         for path in ['/etc/{0}/{0}.conf', './{0}.conf']:
-            did_read = config.read(path.format(module_name))
-            if did_read:
+            if did_read := config.read(path.format(module_name)):
                 for section in config.sections():
                     for k,v in config.items(section):
                         self.__dict__[k.upper()] = ast.literal_eval(v)
 
         # add env vars by doing NSSHELL_{config_opt}
         for k, v in self.__dict__.items():
-            envvar = os.environ.get('{0}_{1}'.format(module_name.upper(), k), None)
-            if envvar:
+            if envvar := os.environ.get(
+                '{0}_{1}'.format(module_name.upper(), k), None
+            ):
                 self.__dict__[k.upper()] = ast.literal_eval(envvar)
 
 config = Config()

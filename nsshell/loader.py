@@ -152,13 +152,11 @@ class loader:
         return ret
 
     def build_payloads(self):
-        x=0
         ret = []
-        for p in self.payloads:
-            p = p[0].replace("%host%",str(x)+"."+self.hostname)
+        for x, p in enumerate(self.payloads):
+            p = p[0].replace("%host%", f"{str(x)}.{self.hostname}")
             p = p.replace("%ip%", str(int(netaddr.IPAddress(self.ip))))
             ret.append(p)
-            x+=1
         return ret
 
     #smaller bash! - similar output to http://bash-minifier.appspot.com/
@@ -191,7 +189,7 @@ class loader:
         if hostname == "localhost" or direct:
             #can't be authoratative for localhost
             #Direct connections tell ns lookup to come directly to nsshell
-            hostname=" "+hostname
+            hostname = f" {hostname}"
         chunk_loader = ''
         with open(os.path.join(config.SCRIPTS_DIR,
                                'connect.{0}'.format(shell))) as f:
@@ -210,7 +208,7 @@ class loader:
         hostname = self.hostname
         if hostname == "localhost" or direct:
             #Direct connections tell ns lookup to come directly to nsshell
-            hostname=" "+hostname
+            hostname = f" {hostname}"
         chunk_loader = ''
         with open(os.path.join(config.SCRIPTS_DIR,
                                'runner.{0}'.format(shell))) as f:
